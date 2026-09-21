@@ -22,9 +22,9 @@ public:
     void setStudentContact(std::string contact);
 
 private:
-    std::string name;      // 姓名
-    std::string gender;    // 性别
-    std::string grade;     // 年级
+    std::string name;       // 姓名
+    std::string gender;     // 性别
+    std::string grade;      // 年级
     std::string class_name; // 班级
-    std::string contact;   // 联系方式
+    std::string contact;    // 联系方式
 };
