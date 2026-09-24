@@ -47,6 +47,7 @@ std::vector<std::string> split(const std::string& s, char delimiter){
         size_t end = s.find(delimiter, start);
         if(end == std::string::npos) end = s.size(); // 找不到分隔符，直到字符串结束
         fields.push_back(s.substr(start, end - start)); // 提取字段
+        if(end == s.size()) break; // 到达字符串结束，跳出循环
         start = end + 1;
     }
     return fields;

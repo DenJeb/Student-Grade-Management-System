@@ -6,7 +6,7 @@
 // 读取 account.csv 文件
 std::vector<User> loadUsers(){
     std::vector<User> users;
-    for(const std::string& line : readLine("data/account.csv")){
+    for(const std::string& line : readLine("data/accounts.csv")){
         std::vector<std::string> f = split(line, ',');
         if(f.size() < 5) continue;
         User u(f[0], f[1], stringToRole(f[2]), f[3] == "1", f[4]);
@@ -20,12 +20,13 @@ void saveUsers(const std::vector<User>& users){
     std::vector<std::string> lines;
     for(const User& u : users){
         lines.push_back(join({u.getAccount(), 
-                            u.getPassword(), 
-                            roleToString(u.getRole()), 
-                            u.getActive() ? "1" : "0", 
-                            u.getCreateTime()}, ','));
+                             u.getPassword(), 
+                             roleToString(u.getRole()), 
+                             u.getActive() ? "1" : "0", 
+                             u.getCreateTime()}, 
+                            ','));
     }
-    writeLines("data/account.csv", lines);
+    writeLines("data/accounts.csv", lines);
 }
 
 // 读取 login_records.csv 文件

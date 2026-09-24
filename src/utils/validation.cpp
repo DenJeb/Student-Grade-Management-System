@@ -16,7 +16,7 @@ bool isInt(const std::string& text){
     return true;
 }
 
-// 判断字符串是否为整数
+// 判断字符串是否为数字
 bool isNumber(const std::string& text){
     if(text.empty()) return false;
 
