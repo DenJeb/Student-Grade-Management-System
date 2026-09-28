@@ -6,7 +6,12 @@
 // 读取 subjects.csv
 std::vector<Subject> loadSubjects(){
     std::vector<Subject> subjects;
+    bool first = true;
     for(const std::string& line : readLine("data/subjects.csv")){
+        if(first){
+            first = false;
+            continue;
+        } // 跳过表头
         std::vector<std::string> f = split(line, ',');
         if(f.size() < 3) continue; // 字段不足跳过
         Subject s;

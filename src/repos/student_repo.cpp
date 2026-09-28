@@ -6,7 +6,12 @@
 // 读取 students.csv 文件
 std::vector<StudentUser> loadStudents(){
     std::vector<StudentUser> students;
+    bool first = true;
     for(const std::string& line : readLine("data/students.csv")){
+        if(first){
+            first = false;
+            continue;
+        } // 跳过表头
         std::vector<std::string> f = split(line, ',');
         if(f.size() < 6) continue; // 字段不足，跳过
         StudentUser s;

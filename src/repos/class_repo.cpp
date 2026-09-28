@@ -6,7 +6,12 @@
 // 读取 classes.csv
 std::vector<ClassInfo> loadClasses(){
     std::vector<ClassInfo> classes;
+    bool first = true;
     for(const std::string& line : readLine("data/classes.csv")){
+        if(first){
+            first = false;
+            continue;
+        } // 跳过表头
         std::vector<std::string> f = split(line, ',');
         if(f.size() < 3) continue; // 字段不足跳过
         ClassInfo c;

@@ -6,7 +6,12 @@
 // 读取 scores.csv
 std::vector<Score> loadScores(){
     std::vector<Score> scores;
+    bool first = true;
     for(const std::string& line : readLine("data/scores.csv")){
+        if(first){
+            first = false;
+            continue;
+        } // 跳过表头
         std::vector<std::string> f = split(line, ',');
         if(f.size() < 3) continue;   // 字段不足跳过
         Score s;
