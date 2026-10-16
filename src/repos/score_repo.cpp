@@ -1,6 +1,7 @@
 // ===== 成绩数据读写 =====
 #include "score_repo.h"
 #include "file_io.h"
+#include <iostream>
 
 
 // 读取 scores.csv
@@ -17,7 +18,12 @@ std::vector<Score> loadScores(){
         Score s;
         s.student_id = f[0];
         s.subject_id = f[1];
-        s.score = std::stoi(f[2]);
+        try{
+            s.score = std::stoi(f[2]);
+        }catch(...){
+            std::cout << "scores.csv 跳过坏行: " << line << "\n";
+            continue;
+        }
         scores.push_back(s);
     }
     return scores;

@@ -3,6 +3,7 @@
 #include "account_service.h"
 #include "auth_service.h"
 #include "student_service.h"
+#include "export_service.h"
 #include "teacher_menu.h"
 #include "console.h"
 #include <iostream>
@@ -193,8 +194,8 @@ static void subjectManageMenu(){
 void adminMenu(const User& user){
     while(true){
         clearScreen();
-        printMenu("管理员主菜单", {"账号列表", "新增账号", "批量新增账号", "删除账号", "禁用/启用账号", "重置密码", "学生信息管理", "班级管理", "科目管理", "成绩录入", "成绩修改", "修改密码", "退出登录"});
-        int choice = inputChoice("请选择: ", 1, 13);
+        printMenu("管理员主菜单", {"账号列表", "新增账号", "批量新增账号", "删除账号", "禁用/启用账号", "重置密码", "学生信息管理", "班级管理", "科目管理", "成绩录入", "成绩修改", "数据备份", "数据恢复", "修改密码", "退出登录"});
+        int choice = inputChoice("请选择: ", 1, 15);
 
         if(choice == 1){
             // 账号列表（按角色筛选）
@@ -283,6 +284,22 @@ void adminMenu(const User& user){
             for(const ClassInfo& c : getAllClasses()) allClassIds.push_back(c.id);
             scoreEditMenu(allClassIds);
         }else if(choice == 12){
+            // 数据备份（data/ → backup/）
+            if(backupAllData()){
+                std::cout << "备份成功（backup/ 目录）\n";
+            }else{
+                std::cout << "备份失败\n";
+            }
+            pause();
+        }else if(choice == 13){
+            // 数据恢复（backup/ → data/）
+            if(restoreAllData()){
+                std::cout << "恢复成功\n";
+            }else{
+                std::cout << "恢复失败（请先做一次备份）\n";
+            }
+            pause();
+        }else if(choice == 14){
             // 修改自己的密码
             std::string oldPwd = inputString("请输入原密码: ");
             std::string newPwd = inputString("请输入新密码: ");

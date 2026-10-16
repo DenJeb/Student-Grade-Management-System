@@ -1,6 +1,7 @@
 // ===== 科目数据读写 =====
 #include "subject_repo.h"
 #include "file_io.h"
+#include <iostream>
 
 
 // 读取 subjects.csv
@@ -17,7 +18,12 @@ std::vector<Subject> loadSubjects(){
         Subject s;
         s.id = f[0];
         s.name = f[1];
-        s.credit = std::stoi(f[2]);
+        try{
+            s.credit = std::stoi(f[2]);
+        }catch(...){
+            std::cout << "subjects.csv 跳过坏行: " << line << "\n";
+            continue;
+        }
         subjects.push_back(s);
     }
     return subjects;
