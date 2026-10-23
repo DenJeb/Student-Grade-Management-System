@@ -29,6 +29,11 @@ static void studentManageMenu(){
             // 新增学生（学号即登录账号，账号本身在账号管理中创建）
             StudentUser s;
             s.setAccount(inputString("学号（即登录账号）: "));
+            if(s.getAccount().empty()){
+                std::cout << "学号不能为空\n";
+                pause();
+                continue;
+            }
             s.setStudentName(inputString("姓名: "));
             s.setStudentGender(inputString("性别: "));
             s.setStudentGrade(inputString("年级: "));
@@ -43,6 +48,9 @@ static void studentManageMenu(){
         }else if(choice == 3){
             // 删除学生（只删档案，账号在账号管理中删除）
             std::string account = inputString("请输入要删除的学号: ");
+            if(!confirm("确定删除学生 " + account + " 的档案吗？")){
+                continue;
+            }
             if(deleteStudent(account)){
                 std::cout << "删除成功（登录账号请到账号管理中删除）\n";
             }else{
@@ -95,6 +103,11 @@ static void classManageMenu(){
             // 新增班级
             ClassInfo c;
             c.id = inputString("班级编号: ");
+            if(c.id.empty()){
+                std::cout << "班级编号不能为空\n";
+                pause();
+                continue;
+            }
             c.grade = inputString("年级: ");
             c.teacher_id = inputString("班主任工号: ");
             if(addClass(c)){
@@ -106,6 +119,9 @@ static void classManageMenu(){
         }else if(choice == 3){
             // 删除班级
             std::string id = inputString("请输入要删除的班级编号: ");
+            if(!confirm("确定删除班级 " + id + " 吗？")){
+                continue;
+            }
             if(deleteClass(id)){
                 std::cout << "删除成功\n";
             }else{
@@ -152,6 +168,11 @@ static void subjectManageMenu(){
             // 新增科目
             Subject s;
             s.id = inputString("科目编号: ");
+            if(s.id.empty()){
+                std::cout << "科目编号不能为空\n";
+                pause();
+                continue;
+            }
             s.name = inputString("科目名称: ");
             s.credit = inputInt("学分: ");
             if(addSubject(s)){
@@ -163,6 +184,9 @@ static void subjectManageMenu(){
         }else if(choice == 3){
             // 删除科目
             std::string id = inputString("请输入要删除的科目编号: ");
+            if(!confirm("确定删除科目 " + id + " 吗？")){
+                continue;
+            }
             if(deleteSubject(id)){
                 std::cout << "删除成功\n";
             }else{
@@ -213,6 +237,11 @@ void adminMenu(const User& user){
             int roleChoice = inputChoice("请选择: ", 1, 2);
             Role role = (roleChoice == 1) ? Role::Student : Role::Teacher;
             std::string account = inputString("请输入账号: ");
+            if(account.empty()){
+                std::cout << "账号不能为空\n";
+                pause();
+                continue;
+            }
             std::string password = inputString("请输入初始密码: ");
             if(addAccount(account, password, role)){
                 std::cout << "新增成功\n";
@@ -239,6 +268,9 @@ void adminMenu(const User& user){
         }else if(choice == 4){
             // 删除账号
             std::string account = inputString("请输入要删除的账号: ");
+            if(!confirm("确定删除账号 " + account + " 吗？")){
+                continue;
+            }
             if(deleteAccount(account)){
                 std::cout << "删除成功\n";
             }else{
@@ -292,7 +324,10 @@ void adminMenu(const User& user){
             }
             pause();
         }else if(choice == 13){
-            // 数据恢复（backup/ → data/）
+            // 数据恢复（backup/ → data/，覆盖现有数据）
+            if(!confirm("恢复将覆盖当前全部数据，确定吗？")){
+                continue;
+            }
             if(restoreAllData()){
                 std::cout << "恢复成功\n";
             }else{
@@ -303,6 +338,11 @@ void adminMenu(const User& user){
             // 修改自己的密码
             std::string oldPwd = inputString("请输入原密码: ");
             std::string newPwd = inputString("请输入新密码: ");
+            if(newPwd.empty()){
+                std::cout << "新密码不能为空\n";
+                pause();
+                continue;
+            }
             if(changePassword(user.getAccount(), oldPwd, newPwd)){
                 std::cout << "修改成功\n";
             }else{

@@ -1,6 +1,7 @@
 // ===== 账号与登录记录读写 =====
 #include "user_repo.h"
 #include "file_io.h"
+#include <fstream>
 
 
 // 读取 accounts.csv 文件
@@ -48,7 +49,10 @@ std::vector<std::string> loadLoginRecords(){
     return records;
 }
 
-// 追加登录记录
+// 追加登录记录（文件不存在时先补表头，避免第一条记录被当表头跳过）
 void appendLoginRecords(const std::string& account, const std::string& time, const std::string& result){
+    std::ifstream check("data/login_records.csv");
+    if(!check.good()) appendLine("data/login_records.csv", "账号,时间,登录结果");
+    check.close();
     appendLine("data/login_records.csv", join({account, time, result}, ','));
 }

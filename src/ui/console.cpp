@@ -16,7 +16,7 @@ void printMenu(const std::string& title, const std::vector<std::string>& options
 std::string inputString(const std::string& prompt){
     std::cout << prompt;
     std::string text;
-    std::getline(std::cin, text);
+    if(!std::getline(std::cin, text)) std::exit(0); // 输入结束（Ctrl+Z）直接退出程序
     return text;
 }
 
@@ -24,7 +24,12 @@ std::string inputString(const std::string& prompt){
 int inputInt(const std::string& prompt){
     while(true){
         std::string text = inputString(prompt);
-        if(isInt(text)) return std::stoi(text);
+        if(isInt(text)){
+            try{
+                return std::stoi(text); // 防止超长数字溢出
+            }catch(...){
+            }
+        }
         std::cout << "输入无效，请输入整数\n";
     }
 }
@@ -46,4 +51,10 @@ void pause(){
 // 清屏
 void clearScreen(){
     system("cls");
+}
+
+// 确认操作：输入 y/Y 返回 true，其他返回 false
+bool confirm(const std::string& message){
+    std::string input = inputString(message + "（确认请输入 y）: ");
+    return input == "y" || input == "Y";
 }

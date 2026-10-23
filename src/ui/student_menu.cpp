@@ -114,6 +114,11 @@ void studentMenu(const User& user){
             // 修改密码
             std::string oldPwd = inputString("请输入原密码: ");
             std::string newPwd = inputString("请输入新密码: ");
+            if(newPwd.empty()){
+                std::cout << "新密码不能为空\n";
+                pause();
+                continue;
+            }
             if(changePassword(user.getAccount(), oldPwd, newPwd)){
                 std::cout << "修改成功\n";
             }else{

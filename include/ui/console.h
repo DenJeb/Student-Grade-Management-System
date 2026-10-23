@@ -10,3 +10,4 @@ int inputInt(const std::string& prompt);                                        
 int inputChoice(const std::string& prompt, int min, int max);                      // 读 [min,max] 选项
 void pause();                                                                      // 按回车继续
 void clearScreen();                                                                // 清屏
+bool confirm(const std::string& message);                                          // 危险操作确认：输入 y/Y 返回 true
