@@ -4,7 +4,6 @@
 #include "student_service.h"
 #include "score_service.h"
 #include "stats_service.h"
-#include "export_service.h"
 #include "console.h"
 #include <iostream>
 #include <iomanip>
@@ -105,7 +104,7 @@ void scoreEditMenu(const std::vector<std::string>& classIds){
 void teacherMenu(const User& user){
     while(true){
         clearScreen();
-        printMenu("教师主菜单", {"查询学生", "编辑学生信息", "成绩录入", "成绩修改", "班级统计", "排名表", "梯队分布", "导出报表", "修改密码", "退出登录"});
+        printMenu("教师主菜单", {"查询学生", "编辑学生信息", "成绩录入", "成绩修改", "班级统计", "排名表", "单科排名", "梯队分布", "修改密码", "退出登录"});
         int choice = inputChoice("请选择: ", 1, 10);
 
         if(choice == 1){
@@ -184,6 +183,22 @@ void teacherMenu(const User& user){
             }
             pause();
         }else if(choice == 7){
+            // 单科排名（仅所辖班级）
+            std::string classId, subjectId;
+            if(!pickClassAndSubject(getTeacherClassIds(user.getAccount()), classId, subjectId)) continue;
+            printMenu("顺序", {"从高到低", "从低到高"});
+            bool ascending = (inputChoice("请选择: ", 1, 2) == 2);
+            std::vector<SubjectRankItem> list = getClassSubjectRankList(classId, subjectId, ascending);
+            if(list.empty()){
+                std::cout << "该班级该科目还没有已录入成绩\n";
+            }else{
+                for(const SubjectRankItem& item : list){
+                    std::cout << item.rank << ". " << item.student_name << "（" << item.student_id << "）"
+                              << " | 成绩 " << item.score << "\n";
+                }
+            }
+            pause();
+        }else if(choice == 8){
             // 梯队分布（按平均分分档）
             std::string classId;
             if(!pickClass(getTeacherClassIds(user.getAccount()), classId)) continue;
@@ -193,17 +208,6 @@ void teacherMenu(const User& user){
             std::cout << "中等（70-79）: " << tiers[2] << " 人\n";
             std::cout << "及格（60-69）: " << tiers[3] << " 人\n";
             std::cout << "不及格（60 以下）: " << tiers[4] << " 人\n";
-            pause();
-        }else if(choice == 8){
-            // 导出班级报表（学生信息/成绩单/排名表/统计报表）
-            std::string classId;
-            if(!pickClass(getTeacherClassIds(user.getAccount()), classId)) continue;
-            int exported = exportClassReports(classId);
-            if(exported > 0){
-                std::cout << "导出完成，共 " << exported << " 个文件（export/ 目录）\n";
-            }else{
-                std::cout << "该班级没有学生，导出失败\n";
-            }
             pause();
         }else if(choice == 9){
             // 修改密码

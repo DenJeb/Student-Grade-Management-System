@@ -168,6 +168,36 @@ std::vector<StudentRankItem> getClassRankList(const std::string& classId, bool b
     return list;
 }
 
+// 班级单科排名表：只统计已录入成绩，同分并列同名次
+std::vector<SubjectRankItem> getClassSubjectRankList(const std::string& classId, const std::string& subjectId, bool ascending){
+    std::vector<SubjectRankItem> list;
+    for(const StudentUser& s : getAllStudents()){
+        if(s.getStudentClass() != classId) continue;
+        int score = getStudentSubjectScore(s.getAccount(), subjectId);
+        if(score < 0) continue; // 未录入不参与
+        SubjectRankItem item;
+        item.student_id = s.getAccount();
+        item.student_name = s.getStudentName();
+        item.score = score;
+        item.rank = 1;
+        list.push_back(item);
+    }
+
+    // 名次 = 1 + 排在我前面的人数（同分并列）
+    for(SubjectRankItem& item : list){
+        for(const SubjectRankItem& other : list){
+            if(ascending ? (other.score < item.score) : (other.score > item.score))
+                item.rank++;
+        }
+    }
+
+    std::sort(list.begin(), list.end(), [ascending](const SubjectRankItem& a, const SubjectRankItem& b){
+        if(a.score != b.score) return ascending ? (a.score < b.score) : (a.score > b.score);
+        return a.student_id < b.student_id; // 同分按学号稳定展示
+    });
+    return list;
+}
+
 // 班级成绩梯队：按平均分分档，无成绩的不参与
 std::vector<int> getClassTiers(const std::string& classId){
     std::vector<int> tiers(5, 0); // 优秀/良好/中等/及格/不及格

@@ -26,6 +26,7 @@ std::vector<ClassInfo> loadClasses(){
 // 写入 classes.csv
 void saveClasses(const std::vector<ClassInfo>& classes){
     std::vector<std::string> lines;
+    lines.push_back("班级编号,年级,班主任工号"); // 表头（与 loadClasses 跳过表头的约定保持一致）
     for(const ClassInfo& c: classes){
         lines.push_back(join({c.id, c.grade, c.teacher_id}, ','));
     }

@@ -30,6 +30,7 @@ public:
     // 设置器
     void setAccount(std::string account);
     void setPassword(std::string password);
+    void setActive(bool active);
 
 private:
     std::string account;     // 账号

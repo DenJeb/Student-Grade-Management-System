@@ -27,6 +27,7 @@ std::string User::getCreateTime() const{ return create_time; }
 // 设置器
 void User::setAccount(std::string account){ this->account = account; }
 void User::setPassword(std::string password){ this->password = password; }
+void User::setActive(bool active){ this->active = active; }
 
 // 角色与 CSV 文本互转（"student"/"teacher"/"admin"）
 std::string roleToString(Role role){

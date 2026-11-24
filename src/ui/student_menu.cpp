@@ -3,7 +3,6 @@
 #include "auth_service.h"
 #include "student_service.h"
 #include "stats_service.h"
-#include "export_service.h"
 #include "console.h"
 #include <iostream>
 #include <iomanip>
@@ -13,8 +12,8 @@
 void studentMenu(const User& user){
     while(true){
         clearScreen();
-        printMenu("学生主菜单", {"个人信息", "个人成绩单", "班级排名", "单科排名", "导出成绩报表", "查看登录记录", "修改密码", "退出登录"});
-        int choice = inputChoice("请选择: ", 1, 8);
+        printMenu("学生主菜单", {"个人信息", "个人成绩单", "班级排名", "单科排名", "查看登录记录", "修改密码", "退出登录"});
+        int choice = inputChoice("请选择: ", 1, 7);
 
         if(choice == 1){
             // 个人信息（只读）
@@ -76,30 +75,6 @@ void studentMenu(const User& user){
                       << " 名（班级 " << getClassSize(user.getAccount()) << " 人）\n";
             pause();
         }else if(choice == 5){
-            // 导出成绩报表（全部/单科）
-            std::vector<SubjectScore> detail = getStudentScoreDetail(user.getAccount());
-            if(detail.empty()){
-                std::cout << "暂无已录入成绩，无可导出\n";
-                pause();
-                continue;
-            }
-            printMenu("导出范围", {"全部科目", "单科"});
-            int scope = inputChoice("请选择: ", 1, 2);
-            std::string subjectId;
-            if(scope == 2){
-                std::vector<std::string> options;
-                for(const SubjectScore& d : detail) options.push_back(d.subject_name);
-                printMenu("选择科目", options);
-                subjectId = detail[inputChoice("请选择: ", 1, (int)options.size()) - 1].subject_id;
-            }
-            std::string path = exportStudentReport(user.getAccount(), subjectId);
-            if(path.empty()){
-                std::cout << "导出失败\n";
-            }else{
-                std::cout << "导出成功: " << path << "\n";
-            }
-            pause();
-        }else if(choice == 6){
             // 查看登录记录
             std::vector<std::string> records = getLoginRecords(user.getAccount());
             if(records.empty()){
@@ -110,7 +85,7 @@ void studentMenu(const User& user){
                 }
             }
             pause();
-        }else if(choice == 7){
+        }else if(choice == 6){
             // 修改密码
             std::string oldPwd = inputString("请输入原密码: ");
             std::string newPwd = inputString("请输入新密码: ");

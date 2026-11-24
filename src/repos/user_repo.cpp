@@ -24,6 +24,7 @@ std::vector<User> loadUsers(){
 // 写入 accounts.csv 文件
 void saveUsers(const std::vector<User>& users){
     std::vector<std::string> lines;
+    lines.push_back("账号,密码,角色,状态,创建时间"); // 表头（与 loadUsers 跳过表头的约定保持一致）
     for(const User& u : users){
         lines.push_back(join({u.getAccount(), 
                              u.getPassword(), 
@@ -49,10 +50,12 @@ std::vector<std::string> loadLoginRecords(){
     return records;
 }
 
-// 追加登录记录（文件不存在时先补表头，避免第一条记录被当表头跳过）
+// 追加登录记录（文件不存在或为空时先补表头，避免第一条记录被当表头跳过）
 void appendLoginRecords(const std::string& account, const std::string& time, const std::string& result){
     std::ifstream check("data/login_records.csv");
-    if(!check.good()) appendLine("data/login_records.csv", "账号,时间,登录结果");
+    if(!check.good() || check.peek() == std::ifstream::traits_type::eof()){
+        appendLine("data/login_records.csv", "账号,时间,登录结果");
+    }
     check.close();
     appendLine("data/login_records.csv", join({account, time, result}, ','));
 }

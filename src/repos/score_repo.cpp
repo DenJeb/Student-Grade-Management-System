@@ -32,6 +32,7 @@ std::vector<Score> loadScores(){
 // 写入 scores.csv
 void saveScores(const std::vector<Score>& scores){
     std::vector<std::string> lines;
+    lines.push_back("学号,科目编号,成绩"); // 表头（与 loadScores 跳过表头的约定保持一致）
     for(const Score& s : scores){
         lines.push_back(join({s.student_id, s.subject_id, std::to_string(s.score)}, ','));
     }

@@ -32,6 +32,7 @@ std::vector<Subject> loadSubjects(){
 // 写入 subjects.csv
 void saveSubjects(const std::vector<Subject>& subjects){
     std::vector<std::string> lines;
+    lines.push_back("科目编号,科目名称,学分"); // 表头（与 loadSubjects 跳过表头的约定保持一致）
     for(const Subject& s : subjects){
         lines.push_back(join({s.id, s.name, std::to_string(s.credit)}, ','));
     }

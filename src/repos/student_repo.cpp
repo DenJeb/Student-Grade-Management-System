@@ -29,6 +29,7 @@ std::vector<StudentUser> loadStudents(){
 // 写入 students.csv 文件
 void saveStudents(const std::vector<StudentUser>& students){
     std::vector<std::string> lines;
+    lines.push_back("学号,姓名,性别,年级,班级,联系方式"); // 表头（与 loadStudents 跳过表头的约定保持一致）
     for(const StudentUser& s : students){
         lines.push_back(join({s.getAccount(), 
                              s.getStudentName(), 

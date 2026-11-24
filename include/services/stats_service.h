@@ -33,6 +33,14 @@ struct StudentRankItem{
     double average;           // 平均分
 };
 
+// 单科排名条目
+struct SubjectRankItem{
+    std::string student_id;   // 学号
+    std::string student_name; // 姓名
+    int score;                // 成绩
+    int rank;                 // 名次（同分并列）
+};
+
 
 double scoreToGpa(int score);                                                    // 分数转绩点（分段表，见计划书 3.5）
 std::vector<SubjectScore> getStudentScoreDetail(const std::string& studentId);   // 已录入成绩的明细（未录入的不出现）
@@ -50,6 +58,9 @@ std::vector<ClassSubjectStat> getClassSubjectStats(const std::string& classId);
 
 // 班级排名表（byTotal: true 按总分、false 按平均分；ascending: 升序）
 std::vector<StudentRankItem> getClassRankList(const std::string& classId, bool byTotal, bool ascending);
+
+// 班级单科排名表（只统计已录入成绩；ascending: 升序；同分并列同名次）
+std::vector<SubjectRankItem> getClassSubjectRankList(const std::string& classId, const std::string& subjectId, bool ascending);
 
 // 班级成绩梯队（按平均分分档，返回各档人数：优秀/良好/中等/及格/不及格）
 std::vector<int> getClassTiers(const std::string& classId);
